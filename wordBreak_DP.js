@@ -25,3 +25,26 @@ var wordBreak = function(s, wordDict) {
     }
    return mark[mark.length-1] ? true :false;
 };
+var re = function(start,s, wordDict,arr,res,ref,len) {
+    var mark=0,i;
+    if(start===len){
+      res.push(arr.join(" "));
+      return;
+    }
+      for(i=start;i<len;i++){
+        if(ref[start+(i-start)]!==0){ //filter out unnecessary recursive
+          if(wordDict.has(s.substring(start,i+1))) {
+              arr.push(s.substring(start,i+1));
+              ref[i]=re(i+1,s,wordDict,arr,res,ref,len);
+              arr.pop();
+              mark=1;
+          }
+        }
+      }
+      return mark;
+}; 
+var wordBreak = function(s, wordDict) {
+    var arr=[],res=[],len=s.length,ref=new Array(len);
+    re(0,s,wordDict,arr,res,ref,len);
+    return res;
+};
